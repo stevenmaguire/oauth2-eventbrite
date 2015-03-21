@@ -66,16 +66,3 @@ if (!isset($_GET['code'])) {
     echo $token->accessToken;
 }
 ```
-
-### Refreshing a Token
-
-```php
-$provider = new Stevenmaguire\OAuth2\Client\Provider\Eventbrite([
-    'clientId'          => '{eventbrite-client-id}',
-    'clientSecret'      => '{eventbrite-client-secret}',
-    'redirectUri'       => 'https://example.com/callback-url'
-]);
-
-$grant = new \League\OAuth2\Client\Grant\RefreshToken();
-$token = $provider->getAccessToken($grant, ['refresh_token' => $refreshToken]);
-```
