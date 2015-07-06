@@ -1,39 +1,93 @@
 <?php namespace Stevenmaguire\OAuth2\Client\Provider;
 
 use League\OAuth2\Client\Provider\AbstractProvider;
-use League\OAuth2\Client\Entity\User;
 use League\OAuth2\Client\Token\AccessToken;
+use Psr\Http\Message\ResponseInterface;
 
 class Eventbrite extends AbstractProvider
 {
+    /**
+     * Authorization header
+     *
+     * @var string
+     */
     public $authorizationHeader = 'Bearer';
 
-    public function urlAuthorize()
+    /**
+     * Get authorization url to begin OAuth flow
+     *
+     * @return string
+     */
+    public function getBaseAuthorizationUrl()
     {
         return 'https://www.eventbrite.com/oauth/authorize';
     }
 
-    public function urlAccessToken()
+    /**
+     * Get access token url to retrieve token
+     *
+     * @return string
+     */
+    public function getBaseAccessTokenUrl(array $params)
     {
         return 'https://www.eventbrite.com/oauth/token';
     }
 
-    public function urlUserDetails(AccessToken $token)
+    /**
+     * Get provider url to fetch user details
+     *
+     * @param  AccessToken $token
+     *
+     * @return string
+     */
+    public function getUserDetailsUrl(AccessToken $token)
     {
         return 'https://www.eventbrite.com/json/user_get';
     }
 
-    public function userDetails($response, AccessToken $token)
+    /**
+     * Get the default scopes used by this provider.
+     *
+     * This should not be a complete list of all scopes, but the minimum
+     * required for the provider user interface!
+     *
+     * @return array
+     */
+    protected function getDefaultScopes()
     {
-        $user = new User();
-        $user->exchangeArray([
-            'uid' => $response->user->user_id,
-            'email' => $response->user->email,
-        ]);
-
-        return $user;
+        return [];
     }
 
+    /**
+     * Check a provider response for errors.
+     *
+     * @throws IdentityProviderException
+     * @param  ResponseInterface $response
+     * @param  string $data Parsed response data
+     * @return void
+     */
+    protected function checkResponse(ResponseInterface $response, $data)
+    {
+
+    }
+
+    /**
+     * Generate a user object from a successful user details request.
+     *
+     * @param object $response
+     * @param AccessToken $token
+     * @return League\OAuth2\Client\Provider\UserInterface
+     */
+    protected function createUser(array $response, AccessToken $token)
+    {
+        $attributes = [
+            'userId' => $response['user']['user_id'],
+            'email' => $response['user']['email'],
+        ];
+
+        return new User($attributes);
+    }
+/*
     public function userUid($response, AccessToken $token)
     {
         return $response->user->user_id;
@@ -48,4 +102,5 @@ class Eventbrite extends AbstractProvider
     {
         return $response->user->user_id;
     }
+*/
 }
