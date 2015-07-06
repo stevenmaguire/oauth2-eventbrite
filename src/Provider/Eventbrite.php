@@ -7,11 +7,20 @@ use Psr\Http\Message\ResponseInterface;
 class Eventbrite extends AbstractProvider
 {
     /**
-     * Authorization header
+     * Get authorization headers used by this provider.
      *
-     * @var string
+     * Typically this is "Bearer" or "MAC". For more information see:
+     * http://tools.ietf.org/html/rfc6749#section-7.1
+     *
+     * No default is provided, providers must overload this method to activate
+     * authorization headers.
+     *
+     * @return array
      */
-    public $authorizationHeader = 'Bearer';
+    protected function getAuthorizationHeaders($token = null)
+    {
+        return ['Authorization' => 'Bearer ' . $token];
+    }
 
     /**
      * Get authorization url to begin OAuth flow
