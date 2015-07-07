@@ -34,7 +34,7 @@ if (!isset($_GET['code'])) {
 
     // If we don't have an authorization code then get one
     $authUrl = $provider->getAuthorizationUrl();
-    $_SESSION['oauth2state'] = $provider->state;
+    $_SESSION['oauth2state'] = $provider->getState();
     header('Location: '.$authUrl);
     exit;
 
@@ -55,10 +55,10 @@ if (!isset($_GET['code'])) {
     try {
 
         // We got an access token, let's now get the user's details
-        $userDetails = $provider->getUserDetails($token);
+        $user = $provider->getUser($token);
 
         // Use these details to create a new profile
-        printf('Hello %s!', $userDetails->firstName);
+        printf('Hello %s!', $user->getFirstname());
 
     } catch (Exception $e) {
 
@@ -67,6 +67,27 @@ if (!isset($_GET['code'])) {
     }
 
     // Use this to interact with an API on the users behalf
-    echo $token->accessToken;
+    echo $token;
 }
 ```
+
+## Testing
+
+``` bash
+$ ./vendor/bin/phpunit
+```
+
+## Contributing
+
+Please see [CONTRIBUTING](https://github.com/stevenmaguire/oauth2-eventbrite/blob/master/CONTRIBUTING.md) for details.
+
+
+## Credits
+
+- [Steven Maguire](https://github.com/stevenmaguire)
+- [All Contributors](https://github.com/stevenmaguire/oauth2-eventbrite/contributors)
+
+
+## License
+
+The MIT License (MIT). Please see [License File](https://github.com/stevenmaguire/oauth2-eventbrite/blob/master/LICENSE) for more information.
