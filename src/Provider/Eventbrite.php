@@ -89,12 +89,7 @@ class Eventbrite extends AbstractProvider
      */
     protected function createUser(array $response, AccessToken $token)
     {
-        $attributes = [
-            'userId' => $response['user']['user_id'],
-            'email' => $response['user']['email'],
-        ];
-
-        return new User($attributes);
+        return new User($response, $response['user']['user_id']);
     }
 /*
     public function userUid($response, AccessToken $token)
