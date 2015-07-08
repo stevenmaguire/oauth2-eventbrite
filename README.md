@@ -58,7 +58,7 @@ if (!isset($_GET['code'])) {
         $user = $provider->getUser($token);
 
         // Use these details to create a new profile
-        printf('Hello %s!', $user->getFirstname());
+        printf('Hello %s!', $user->getUserId());
 
     } catch (Exception $e) {
 
