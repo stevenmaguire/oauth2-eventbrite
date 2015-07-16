@@ -49,7 +49,7 @@ class Eventbrite extends AbstractProvider
      *
      * @return string
      */
-    public function getUserDetailsUrl(AccessToken $token)
+    public function getResourceOwnerDetailsUrl(AccessToken $token)
     {
         return 'https://www.eventbrite.com/json/user_get';
     }
@@ -85,26 +85,10 @@ class Eventbrite extends AbstractProvider
      *
      * @param object $response
      * @param AccessToken $token
-     * @return League\OAuth2\Client\Provider\UserInterface
+     * @return League\OAuth2\Client\Provider\ResourceOwnerInterface
      */
-    protected function createUser(array $response, AccessToken $token)
+    protected function createResourceOwner(array $response, AccessToken $token)
     {
-        return new User($response, $response['user']['user_id']);
+        return new EventbriteResourceOwner($response, $response['user']['user_id']);
     }
-/*
-    public function userUid($response, AccessToken $token)
-    {
-        return $response->user->user_id;
-    }
-
-    public function userEmail($response, AccessToken $token)
-    {
-        return isset($response->user->email) && $response->user->email ? $response->user->email : null;
-    }
-
-    public function userScreenName($response, AccessToken $token)
-    {
-        return $response->user->user_id;
-    }
-*/
 }
