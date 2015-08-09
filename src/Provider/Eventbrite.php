@@ -2,25 +2,12 @@
 
 use League\OAuth2\Client\Provider\AbstractProvider;
 use League\OAuth2\Client\Token\AccessToken;
+use League\OAuth2\Client\Tool\BearerAuthorizationTrait;
 use Psr\Http\Message\ResponseInterface;
 
 class Eventbrite extends AbstractProvider
 {
-    /**
-     * Get authorization headers used by this provider.
-     *
-     * Typically this is "Bearer" or "MAC". For more information see:
-     * http://tools.ietf.org/html/rfc6749#section-7.1
-     *
-     * No default is provided, providers must overload this method to activate
-     * authorization headers.
-     *
-     * @return array
-     */
-    protected function getAuthorizationHeaders($token = null)
-    {
-        return ['Authorization' => 'Bearer ' . $token];
-    }
+    use BearerAuthorizationTrait;
 
     /**
      * Get authorization url to begin OAuth flow
@@ -89,6 +76,6 @@ class Eventbrite extends AbstractProvider
      */
     protected function createResourceOwner(array $response, AccessToken $token)
     {
-        return new EventbriteResourceOwner($response, $response['user']['user_id']);
+        return new EventbriteResourceOwner($response);
     }
 }

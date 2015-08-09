@@ -105,6 +105,8 @@ class EventbriteTest extends \PHPUnit_Framework_TestCase
         $user = $this->provider->getResourceOwner($token);
 
         $this->assertEquals($email, $user->getEmail());
+        $this->assertEquals($email, $user->toArray()['user']['email']);
         $this->assertEquals($userId, $user->getId());
+        $this->assertEquals($userId, $user->toArray()['user']['user_id']);
     }
 }
