@@ -109,4 +109,22 @@ class EventbriteTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($userId, $user->getId());
         $this->assertEquals($userId, $user->toArray()['user']['user_id']);
     }
+
+    /**
+     * @expectedException League\OAuth2\Client\Provider\Exception\IdentityProviderException
+     **/
+    public function testExceptionThrownWhenErrorObjectReceived()
+    {
+        $message = uniqid();
+        $status = rand(100,600);
+        $postResponse = m::mock('Psr\Http\Message\ResponseInterface');
+        $postResponse->shouldReceive('getBody')->andReturn('{"error": "VENUE_AND_ONLINE","error_description": "'.$message.'","status_code": '.$status.'}');
+        $postResponse->shouldReceive('getHeader')->andReturn(['content-type' => 'json']);
+        $client = m::mock('GuzzleHttp\ClientInterface');
+        $client->shouldReceive('send')
+            ->times(1)
+            ->andReturn($postResponse);
+        $this->provider->setHttpClient($client);
+        $token = $this->provider->getAccessToken('authorization_code', ['code' => 'mock_authorization_code']);
+    }
 }

@@ -1,6 +1,7 @@
 <?php namespace Stevenmaguire\OAuth2\Client\Provider;
 
 use League\OAuth2\Client\Provider\AbstractProvider;
+use League\OAuth2\Client\Provider\Exception\IdentityProviderException;
 use League\OAuth2\Client\Token\AccessToken;
 use League\OAuth2\Client\Tool\BearerAuthorizationTrait;
 use Psr\Http\Message\ResponseInterface;
@@ -64,7 +65,13 @@ class Eventbrite extends AbstractProvider
      */
     protected function checkResponse(ResponseInterface $response, $data)
     {
-
+        if (isset($data['error'])) {
+            throw new IdentityProviderException(
+                $data['error_description'] ?: $response->getReasonPhrase(),
+                $data['status_code'] ?: $response->getStatusCode(),
+                $response
+            );
+        }
     }
 
     /**
