@@ -1,6 +1,10 @@
 # Changelog
 All Notable changes to `oauth2-eventbrite` will be documented in this file
 
+## 1.0.0 - 2017-01-25
+
+Bump for base package parity
+
 ## 0.2.0 - 2015-08-20
 
 ### Added
